@@ -30,7 +30,8 @@ namespace AppVendas.Migrations
 
                     b.Property<string>("CategoriaNome")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.HasKey("CategoriaId");
 
@@ -72,10 +73,7 @@ namespace AppVendas.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid?>("ProdutoId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("PublicId")
+                    b.Property<Guid>("ProdutoId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<double>("QtdadeVendida")
@@ -84,14 +82,14 @@ namespace AppVendas.Migrations
                     b.Property<double>("ValorTotalDoItem")
                         .HasColumnType("float");
 
-                    b.Property<Guid>("VendaID")
+                    b.Property<Guid>("VendaId")
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("ItemDaVendaId");
 
                     b.HasIndex("ProdutoId");
 
-                    b.HasIndex("VendaID");
+                    b.HasIndex("VendaId");
 
                     b.ToTable("ItensDaVenda", (string)null);
                 });
@@ -154,11 +152,13 @@ namespace AppVendas.Migrations
                 {
                     b.HasOne("AppVendas.Models.Produto", "Produto")
                         .WithMany()
-                        .HasForeignKey("ProdutoId");
+                        .HasForeignKey("ProdutoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("AppVendas.Models.Venda", "Venda")
                         .WithMany()
-                        .HasForeignKey("VendaID")
+                        .HasForeignKey("VendaId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
